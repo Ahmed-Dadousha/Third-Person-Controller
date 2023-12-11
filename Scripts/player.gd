@@ -43,10 +43,14 @@ func _physics_process(delta):
 	if Input.is_action_pressed("run"):
 		SPEED = run_speed
 		is_running = true
-		#var run_direction = (transform.basis * Vector3(0, 0, -1)).normalized()
-		#velocity.x = run_direction.x * SPEED
-		#velocity.z = run_direction.z * SPEED
-		#move_and_slide()
+		var run_direction = (transform.basis * Vector3(0, 0, -1)).normalized()
+		velocity.x = run_direction.x * SPEED
+		velocity.z = run_direction.z * SPEED
+		visuals.look_at(position + run_direction)
+		if is_running:
+			if animation_player.current_animation != "running":
+				animation_player.play("running")
+		move_and_slide()
 	else:
 		SPEED = walk_speed	
 		is_running = false
@@ -79,7 +83,7 @@ func _physics_process(delta):
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 		
-	else:
+	elif is_running == false:
 		if !is_locked:
 			if animation_player.current_animation != "idle":
 				animation_player.play("idle")
